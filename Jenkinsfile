@@ -28,5 +28,16 @@ pipeline {
                     }
                 }
             }
+            stage('Build on kubenetes'){
+                steps {
+                    withKubeConfig([credentialsId: 'kubeconfig']){
+                        sh 'pwd'
+                        sh 'cp -r helm/* .'
+                        sh 'ls -ltrh'
+                        sh 'pwd'
+                        sh '/usr/local/bin/helm upgrade --install petclinic-app petclinic --set image.repository=abhi3490/petclinic --set image.tag=$(BUILD_NUMBER)'
+                    }
+                }    
+            }
         }
 }
